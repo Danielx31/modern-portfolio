@@ -1,11 +1,39 @@
 import { ArrowDown, Sparkles, Rocket } from "lucide-react";
 import { Button } from "./ui/button";
+import { useEffect } from "react";
 
 export function Hero() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    const container = document.getElementById("particles-container");
+    if (!container) return;
+
+    // Clear any existing particles
+    container.innerHTML = "";
+
+    // Create 15 particles
+    for (let i = 0; i < 15; i++) {
+      const particle = document.createElement("div");
+      particle.className = "particle";
+
+      // Generate random values for positioning and animation
+      const top = Math.random() * 100;
+      const left = Math.random() * 100;
+      const duration = 5 + Math.random() * 10;
+      const delay = Math.random() * 5;
+
+      particle.style.top = `${top}%`;
+      particle.style.left = `${left}%`;
+      particle.style.animation = `float ${duration}s ease-in-out infinite`;
+      particle.style.animationDelay = `${delay}s`;
+
+      container.appendChild(particle);
+    }
+  }, []);
 
   return (
     <section
@@ -109,22 +137,10 @@ export function Hero() {
       </div>
 
       {/* Floating Particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="particle"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animation: `float ${
-                5 + Math.random() * 10
-              }s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          />
-        ))}
-      </div>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        id="particles-container"
+      />
     </section>
   );
 }
