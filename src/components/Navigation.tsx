@@ -6,14 +6,27 @@ import { Button } from "./ui/button";
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    setMounted(true);
+
+    if (typeof window !== "undefined") {
+      // Initialize with the current scroll position after component mounts
       setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 50);
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
   }, []);
+
+  // During initial render, ensure the appearance matches the server render
+  // We'll render the default state initially, then update after mount
+  const displayScrolled = mounted && isScrolled;
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -32,12 +45,12 @@ export function Navigation() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "py-4" : "py-6"
+        displayScrolled ? "py-4" : "py-6"
       }`}
     >
       <div
         className={`max-w-7xl mx-auto px-6 ${
-          isScrolled ? "space-glass rounded-2xl" : ""
+          displayScrolled ? "space-glass rounded-2xl" : ""
         }`}
       >
         <div className="flex items-center justify-between py-4">
