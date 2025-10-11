@@ -1,4 +1,106 @@
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
 export function Skills() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const categoriesRef = useRef<HTMLDivElement>(null);
+  const tagsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // ✨ Animate header
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current,
+          { opacity: 0, y: 50 },
+          {
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+          }
+        );
+      }
+
+      // 🧭 Animate skill category cards
+      const categoryCards =
+        categoriesRef.current?.querySelectorAll(".skill-category");
+      if (categoryCards && categoryCards.length > 0) {
+        gsap.fromTo(
+          categoryCards,
+          { opacity: 0, x: -50 },
+          {
+            scrollTrigger: {
+              trigger: categoriesRef.current,
+              start: "top 75%",
+              toggleActions: "play none none reverse",
+            },
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power3.out",
+          }
+        );
+      }
+
+      // 📊 Animate progress bars
+      categoryCards?.forEach((card) => {
+        const progressBars = card.querySelectorAll(".skill-progress-bar");
+        progressBars.forEach((bar) => {
+          const width = bar.getAttribute("data-width") || "0%";
+          gsap.fromTo(
+            bar,
+            { width: "0%" },
+            {
+              scrollTrigger: {
+                trigger: card,
+                start: "top 75%",
+                toggleActions: "play none none none",
+              },
+              width: width,
+              duration: 1.5,
+              ease: "power2.out",
+            }
+          );
+        });
+      });
+
+      // 🪄 Animate tech tags
+      const tags = tagsRef.current?.querySelectorAll(".tech-tag");
+      if (tags && tags.length > 0) {
+        gsap.fromTo(
+          tags,
+          { opacity: 0, scale: 0.8, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: tagsRef.current,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.05,
+            ease: "back.out(1.7)",
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const skillCategories = [
     {
       category: "Frontend Development",
@@ -39,13 +141,13 @@ export function Skills() {
   ];
 
   return (
-    <section id="skills" className="relative py-32 px-6">
+    <section ref={sectionRef} id="skills" className="relative py-32 px-6">
       {/* Section Divider */}
       <div className="space-divider mb-20" />
 
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-20 space-y-4">
+        {/* 🏁 Section Header */}
+        <div ref={headerRef} className="text-center mb-20 space-y-4">
           <div className="inline-block">
             <h2 className="text-5xl md:text-6xl galaxy-text text-glow mb-4">
               Skills & Expertise
@@ -59,12 +161,15 @@ export function Skills() {
           </p>
         </div>
 
-        {/* Skills Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* 💻 Skills Grid */}
+        <div
+          ref={categoriesRef}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+        >
           {skillCategories.map((category, categoryIndex) => (
             <div
               key={categoryIndex}
-              className="space-glass-hover rounded-2xl p-8 space-y-6"
+              className="skill-category space-glass-hover rounded-2xl p-8 space-y-6"
             >
               {/* Category Header */}
               <div className="text-center pb-4 border-b border-purple-500/30">
@@ -89,13 +194,13 @@ export function Skills() {
                     {/* Progress Bar */}
                     <div className="relative h-2 bg-slate-800 rounded-full overflow-hidden">
                       <div
-                        className={`absolute top-0 left-0 h-full bg-gradient-to-r ${category.color} rounded-full transition-all duration-1000 ease-out`}
+                        className={`skill-progress-bar absolute top-0 left-0 h-full bg-gradient-to-r ${category.color} rounded-full transition-all duration-1000 ease-out`}
+                        data-width={`${skill.level}%`}
                         style={{
                           width: `${skill.level}%`,
                           animation: "shimmer 3s infinite",
                         }}
                       />
-
                       {/* Glow Effect */}
                       <div
                         className={`absolute top-0 left-0 h-full bg-gradient-to-r ${category.color} rounded-full blur-sm opacity-50`}
@@ -116,8 +221,8 @@ export function Skills() {
           ))}
         </div>
 
-        {/* Additional Skills Tags */}
-        <div className="mt-16">
+        {/* 🪄 Additional Skills Tags */}
+        <div ref={tagsRef} className="mt-16">
           <h3 className="text-2xl text-center text-slate-200 mb-8">
             Other Technologies & Frameworks
           </h3>
@@ -159,7 +264,7 @@ export function Skills() {
             ].map((tech, index) => (
               <span
                 key={index}
-                className="cosmic-badge px-4 py-2 rounded-full text-sm hover-scale cursor-default"
+                className="tech-tag cosmic-badge px-4 py-2 rounded-full text-sm hover-scale cursor-default"
               >
                 {tech}
               </span>
@@ -167,7 +272,7 @@ export function Skills() {
           </div>
         </div>
 
-        {/* Certifications/Achievements */}
+        {/* 🏆 Certifications/Achievements */}
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
