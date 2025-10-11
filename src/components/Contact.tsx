@@ -12,7 +12,11 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function Contact() {
   const [loading, setLoading] = useState(false);
@@ -21,12 +25,84 @@ export function Contact() {
     message: string;
   } | null>(null);
 
+  // ✨ Refs for GSAP Animations
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const contactInfoRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animate header
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current,
+          { opacity: 0, y: 50 },
+          {
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+          }
+        );
+      }
+
+      // Animate form with slide from left
+      if (formRef.current) {
+        gsap.fromTo(
+          formRef.current,
+          { opacity: 0, x: -100 },
+          {
+            scrollTrigger: {
+              trigger: formRef.current,
+              start: "top 75%",
+              toggleActions: "play none none reverse",
+            },
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: "power3.out",
+          }
+        );
+      }
+
+      // Animate contact info cards with stagger
+      const contactCards =
+        contactInfoRef.current?.querySelectorAll(".contact-card");
+      if (contactCards && contactCards.length > 0) {
+        gsap.fromTo(
+          contactCards,
+          { opacity: 0, x: 100 },
+          {
+            scrollTrigger: {
+              trigger: contactInfoRef.current,
+              start: "top 75%",
+              toggleActions: "play none none reverse",
+            },
+            opacity: 1,
+            x: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setAlert(null);
 
-    const form = e.currentTarget as HTMLFormElement; // ✅ cast to form
+    const form = e.currentTarget;
     const formData = new FormData(form);
     formData.append("access_key", "b70ca948-9077-4e87-a6a2-35cccd279814");
 
@@ -47,7 +123,7 @@ export function Contact() {
           type: "success",
           message: "✅ Message Sent! Thank you! I’ll get back to you shortly.",
         });
-        form.reset(); // ✅ safe reset call
+        form.reset();
       } else {
         setAlert({
           type: "error",
@@ -59,7 +135,7 @@ export function Contact() {
       setAlert({
         type: "info",
         message:
-          "⚠️ Network issue — something went wrong, but your message might still be sent. Please check your inbox.",
+          "⚠️ Network issue — something went wrong, but your message might still be sent.",
       });
     }
 
@@ -115,29 +191,27 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="relative py-32 px-6">
+    <section ref={sectionRef} id="contact" className="relative py-32 px-6">
       <div className="space-divider mb-20" />
 
       <div className="max-w-6xl mx-auto">
-        {/* Header Section */}
-        <div className="text-center mb-20 space-y-4">
+        {/* ✨ Header with GSAP */}
+        <div ref={headerRef} className="text-center mb-20 space-y-4">
           <div className="inline-block">
             <h2 className="text-5xl md:text-6xl cosmic-text text-glow mb-4">
               Let&apos;s Connect
             </h2>
             <div className="h-1 w-32 mx-auto bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full" />
           </div>
-
           <p className="text-xl text-slate-300 max-w-3xl mx-auto mt-6 leading-relaxed">
             Have a project in mind or just want to chat? I&apos;m always open to
             discussing new opportunities and creative ideas.
           </p>
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Contact Form */}
-          <div className="space-glass-hover rounded-2xl p-8">
+          {/* ✨ Form with GSAP */}
+          <div ref={formRef} className="space-glass-hover rounded-2xl p-8">
             <div className="mb-6">
               <h3 className="text-2xl text-white mb-2">Send a Message</h3>
               <p className="text-slate-400">
@@ -221,9 +295,9 @@ export function Contact() {
             </form>
           </div>
 
-          {/* Contact Info & Social Links */}
-          <div className="space-y-6">
-            <div className="space-glass-hover rounded-2xl p-8">
+          {/* ✨ Contact Info with GSAP */}
+          <div ref={contactInfoRef} className="space-y-6">
+            <div className="contact-card space-glass-hover rounded-2xl p-8">
               <h3 className="text-2xl text-white mb-6">Contact Information</h3>
               <div className="space-y-4">
                 {contactInfo.map((info, index) => {
@@ -251,7 +325,7 @@ export function Contact() {
               </div>
             </div>
 
-            <div className="space-glass-hover rounded-2xl p-8">
+            <div className="contact-card space-glass-hover rounded-2xl p-8">
               <h3 className="text-2xl text-white mb-6">Follow Me</h3>
               <div className="grid grid-cols-2 gap-4">
                 {socialLinks.map((link, index) => {
@@ -277,7 +351,7 @@ export function Contact() {
               </div>
             </div>
 
-            <div className="space-glass rounded-2xl p-6 text-center">
+            <div className="contact-card space-glass rounded-2xl p-6 text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                 <span className="text-green-400">Available for Work</span>
@@ -289,7 +363,7 @@ export function Contact() {
           </div>
         </div>
 
-        {/* Schedule Call Section */}
+        {/* ✨ Schedule a Call CTA */}
         <div className="mt-16 text-center space-glass rounded-2xl p-12">
           <h3 className="text-3xl cosmic-text text-glow mb-4">
             Ready to Start Your Project?
