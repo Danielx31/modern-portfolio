@@ -7,18 +7,13 @@ import { Button } from "./ui/button";
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
+  // ✅ Only runs in client, no mismatch
   useEffect(() => {
-    // Ensure this only runs on the client
-    setMounted(true);
-
-    if (typeof window !== "undefined") {
-      const handleScroll = () => setIsScrolled(window.scrollY > 50);
-      window.addEventListener("scroll", handleScroll);
-      handleScroll(); // check immediately
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -35,36 +30,15 @@ export function Navigation() {
     { label: "Contact", id: "contact" },
   ];
 
-  // 🚀 During SSR, render static placeholder to prevent mismatch
-  if (!mounted) {
-    return (
-      <nav className="fixed top-0 left-0 right-0 py-6 z-50 transition-all duration-300 bg-transparent">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between py-4">
-            <button className="flex items-center gap-2 group">
-              <div className="relative">
-                <Rocket className="w-8 h-8 text-purple-400" />
-              </div>
-              <span className="text-xl cosmic-text">{"<Daniel/>"}</span>
-            </button>
-          </div>
-        </div>
-      </nav>
-    );
-  }
-
-  // After hydration (client)
-  const displayScrolled = isScrolled;
-
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        displayScrolled ? "py-4 backdrop-blur-md" : "py-6"
+        isScrolled ? "py-4 backdrop-blur-md" : "py-6"
       } bg-transparent`}
     >
       <div
         className={`max-w-7xl mx-auto px-6 ${
-          displayScrolled ? "space-glass rounded-2xl" : ""
+          isScrolled ? "space-glass rounded-2xl" : ""
         }`}
       >
         <div className="flex items-center justify-between py-4">

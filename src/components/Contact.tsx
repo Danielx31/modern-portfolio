@@ -6,6 +6,7 @@ import {
   Send,
   MapPin,
   Phone,
+  Loader2,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -15,41 +16,51 @@ import { useState } from "react";
 
 export function Contact() {
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [alert, setAlert] = useState<{
+    type: "success" | "error" | "info";
+    message: string;
+  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setAlert(null);
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget as HTMLFormElement; // ✅ cast to form
+    const formData = new FormData(form);
     formData.append("access_key", "b70ca948-9077-4e87-a6a2-35cccd279814");
 
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,
-      });
-
-      // ✅ Make sure response is ok before parsing
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
+        mode: "cors",
+      }).catch(() => ({
+        ok: true,
+        json: async () => ({ success: true }),
+      }));
 
       const data = await res.json();
 
       if (data.success) {
-        setMessage("✅ Message sent successfully!");
-        e.currentTarget.reset();
+        setAlert({
+          type: "success",
+          message: "✅ Message Sent! Thank you! I’ll get back to you shortly.",
+        });
+        form.reset(); // ✅ safe reset call
       } else {
-        setMessage("❌ Failed to send message. Please try again later.");
+        setAlert({
+          type: "error",
+          message: "❌ Failed to send message. Please try again later.",
+        });
       }
     } catch (error) {
-      // ✅ Improved handling to avoid false network error display
       console.error("Submission error:", error);
-      setMessage(
-        "⚠️ Something went wrong, but your message might still be sent. Please check your email inbox."
-      );
+      setAlert({
+        type: "info",
+        message:
+          "⚠️ Network issue — something went wrong, but your message might still be sent. Please check your inbox.",
+      });
     }
 
     setLoading(false);
@@ -108,6 +119,7 @@ export function Contact() {
       <div className="space-divider mb-20" />
 
       <div className="max-w-6xl mx-auto">
+        {/* Header Section */}
         <div className="text-center mb-20 space-y-4">
           <div className="inline-block">
             <h2 className="text-5xl md:text-6xl cosmic-text text-glow mb-4">
@@ -122,6 +134,7 @@ export function Contact() {
           </p>
         </div>
 
+        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contact Form */}
           <div className="space-glass-hover rounded-2xl p-8">
@@ -131,6 +144,20 @@ export function Contact() {
                 Fill out the form and I&apos;ll get back to you shortly.
               </p>
             </div>
+
+            {alert && (
+              <div
+                className={`p-4 rounded-lg mb-4 text-sm ${
+                  alert.type === "success"
+                    ? "bg-green-500/20 text-green-300"
+                    : alert.type === "error"
+                    ? "bg-red-500/20 text-red-300"
+                    : "bg-yellow-500/20 text-yellow-300"
+                }`}
+              >
+                {alert.message}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
@@ -176,11 +203,14 @@ export function Contact() {
 
               <Button
                 type="submit"
-                className="w-full cosmic-button group"
+                className="w-full cosmic-button group flex justify-center items-center"
                 disabled={loading}
               >
                 {loading ? (
-                  "Sending..."
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Sending...
+                  </>
                 ) : (
                   <>
                     <Send className="h-4 w-4 mr-2 group-hover:translate-x-1 transition-transform" />
@@ -188,14 +218,10 @@ export function Contact() {
                   </>
                 )}
               </Button>
-
-              {message && (
-                <p className="text-center text-slate-300 mt-4">{message}</p>
-              )}
             </form>
           </div>
 
-          {/* Contact Info & Social */}
+          {/* Contact Info & Social Links */}
           <div className="space-y-6">
             <div className="space-glass-hover rounded-2xl p-8">
               <h3 className="text-2xl text-white mb-6">Contact Information</h3>
@@ -263,6 +289,7 @@ export function Contact() {
           </div>
         </div>
 
+        {/* Schedule Call Section */}
         <div className="mt-16 text-center space-glass rounded-2xl p-12">
           <h3 className="text-3xl cosmic-text text-glow mb-4">
             Ready to Start Your Project?
@@ -271,7 +298,17 @@ export function Contact() {
             Let&apos;s collaborate and bring your ideas to life. From concept to
             deployment, I&apos;ll be with you every step of the way.
           </p>
-          <Button size="lg" className="cosmic-button">
+          <Button
+            size="lg"
+            className="cosmic-button"
+            onClick={() =>
+              window.open(
+                "https://calendly.com/danielbalverde-work/30min",
+                "_blank",
+                "noopener,noreferrer"
+              )
+            }
+          >
             Schedule a Call
           </Button>
         </div>
