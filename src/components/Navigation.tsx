@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { Menu, X, Rocket } from "lucide-react";
 import { Button } from "./ui/button";
@@ -9,27 +10,16 @@ export function Navigation() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Set mounted to true to prevent SSR/client mismatch
+    // Ensure this only runs on the client
     setMounted(true);
 
-    // Only run on client side
     if (typeof window !== "undefined") {
-      // Initialize with the current scroll position after component mounts
-      // This ensures the client starts with the correct state that matches the actual scroll position
-      setIsScrolled(window.scrollY > 50);
-
-      const handleScroll = () => {
-        setIsScrolled(window.scrollY > 50);
-      };
-
+      const handleScroll = () => setIsScrolled(window.scrollY > 50);
       window.addEventListener("scroll", handleScroll);
+      handleScroll(); // check immediately
       return () => window.removeEventListener("scroll", handleScroll);
     }
   }, []);
-
-  // During initial render, we always start with the unscrolled state to match server render
-  // After mounting, we update based on actual scroll position
-  const displayScrolled = mounted && isScrolled;
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -45,22 +35,36 @@ export function Navigation() {
     { label: "Contact", id: "contact" },
   ];
 
+  // 🚀 During SSR, render static placeholder to prevent mismatch
+  if (!mounted) {
+    return (
+      <nav className="fixed top-0 left-0 right-0 py-6 z-50 transition-all duration-300 bg-transparent">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between py-4">
+            <button className="flex items-center gap-2 group">
+              <div className="relative">
+                <Rocket className="w-8 h-8 text-purple-400" />
+              </div>
+              <span className="text-xl cosmic-text">{"<Daniel/>"}</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
+  // After hydration (client)
+  const displayScrolled = isScrolled;
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        // During initial render (hydration), always show unscrolled state to match server
-        // After mounting, use actual scroll state
-        mounted
-          ? displayScrolled
-            ? "py-4 bg-black/80 backdrop-blur-md"
-            : "py-6"
-          : "py-6"
-      }`}
+        displayScrolled ? "py-4 backdrop-blur-md" : "py-6"
+      } bg-transparent`}
     >
       <div
         className={`max-w-7xl mx-auto px-6 ${
-          // Same logic for the space-glass effect
-          mounted ? (displayScrolled ? "space-glass rounded-2xl" : "") : ""
+          displayScrolled ? "space-glass rounded-2xl" : ""
         }`}
       >
         <div className="flex items-center justify-between py-4">
@@ -100,7 +104,7 @@ export function Navigation() {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 text-slate-300 hover:text-white transition-colors"

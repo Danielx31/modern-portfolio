@@ -11,11 +11,48 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
+import { useState } from "react";
 
 export function Contact() {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("Thank you for your message! This is a demo form.");
+    setLoading(true);
+    setMessage("");
+
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", "b70ca948-9077-4e87-a6a2-35cccd279814");
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      // ✅ Make sure response is ok before parsing
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.success) {
+        setMessage("✅ Message sent successfully!");
+        e.currentTarget.reset();
+      } else {
+        setMessage("❌ Failed to send message. Please try again later.");
+      }
+    } catch (error) {
+      // ✅ Improved handling to avoid false network error display
+      console.error("Submission error:", error);
+      setMessage(
+        "⚠️ Something went wrong, but your message might still be sent. Please check your email inbox."
+      );
+    }
+
+    setLoading(false);
   };
 
   const socialLinks = [
@@ -68,11 +105,9 @@ export function Contact() {
 
   return (
     <section id="contact" className="relative py-32 px-6">
-      {/* Section Divider */}
       <div className="space-divider mb-20" />
 
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
         <div className="text-center mb-20 space-y-4">
           <div className="inline-block">
             <h2 className="text-5xl md:text-6xl cosmic-text text-glow mb-4">
@@ -104,6 +139,7 @@ export function Contact() {
                 </Label>
                 <Input
                   id="name"
+                  name="name"
                   placeholder="Your name"
                   required
                   className="cosmic-input text-white placeholder:text-slate-500"
@@ -116,6 +152,7 @@ export function Contact() {
                 </Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="your.email@example.com"
                   required
@@ -129,6 +166,7 @@ export function Contact() {
                 </Label>
                 <Textarea
                   id="message"
+                  name="message"
                   placeholder="Tell me about your project..."
                   rows={5}
                   required
@@ -136,16 +174,29 @@ export function Contact() {
                 />
               </div>
 
-              <Button type="submit" className="w-full cosmic-button group">
-                <Send className="h-4 w-4 mr-2 group-hover:translate-x-1 transition-transform" />
-                Send Message
+              <Button
+                type="submit"
+                className="w-full cosmic-button group"
+                disabled={loading}
+              >
+                {loading ? (
+                  "Sending..."
+                ) : (
+                  <>
+                    <Send className="h-4 w-4 mr-2 group-hover:translate-x-1 transition-transform" />
+                    Send Message
+                  </>
+                )}
               </Button>
+
+              {message && (
+                <p className="text-center text-slate-300 mt-4">{message}</p>
+              )}
             </form>
           </div>
 
           {/* Contact Info & Social */}
           <div className="space-y-6">
-            {/* Contact Information */}
             <div className="space-glass-hover rounded-2xl p-8">
               <h3 className="text-2xl text-white mb-6">Contact Information</h3>
               <div className="space-y-4">
@@ -174,7 +225,6 @@ export function Contact() {
               </div>
             </div>
 
-            {/* Social Links */}
             <div className="space-glass-hover rounded-2xl p-8">
               <h3 className="text-2xl text-white mb-6">Follow Me</h3>
               <div className="grid grid-cols-2 gap-4">
@@ -201,7 +251,6 @@ export function Contact() {
               </div>
             </div>
 
-            {/* Availability Badge */}
             <div className="space-glass rounded-2xl p-6 text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
@@ -214,7 +263,6 @@ export function Contact() {
           </div>
         </div>
 
-        {/* Call to Action */}
         <div className="mt-16 text-center space-glass rounded-2xl p-12">
           <h3 className="text-3xl cosmic-text text-glow mb-4">
             Ready to Start Your Project?
