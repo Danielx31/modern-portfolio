@@ -22,7 +22,7 @@ export function Projects() {
       description:
         "The system allows employees to submit IT-related issues or service requests, which are automatically logged and assigned unique ticket numbers. Engineers and admins can manage, prioritize, and resolve tickets through a clean dashboard interface with real-time updates and role-based access control.",
       image:
-        "https://images.unsplash.com/photo-1727407209320-1fa6ae60ee05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlY29tbWVyY2UlMjBzaG9wcGluZ3xlbnwxfHx8fDE3NTk4OTE4MzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://plus.unsplash.com/premium_photo-1718674394245-9f270c5fd2b3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1081",
       tags: [
         "Laravel",
         "PHP",
@@ -47,7 +47,7 @@ export function Projects() {
       description:
         "A Quality Control and Assurance platform that streamlines case tracking and engineer assignment across departments. Built with Laravel and Vue.js, it allows users to create, monitor, and update cases with real-time status, detailed logs, and role-based access. The system ensures transparency, efficiency, and accountability in handling service or production quality processes.",
       image:
-        "https://images.unsplash.com/photo-1546900703-cf06143d1239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGV8ZW58MXx8fHwxNzU5ODQ1MDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://images.unsplash.com/photo-1747999827332-163aa33cd597?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
       tags: [
         "Laravel",
         "VueJS",
@@ -72,7 +72,7 @@ export function Projects() {
       description:
         "A customized Point of Sale and Inventory Management platform designed for beverage businesses. It streamlines daily operations by integrating real-time sales, product customization, and stock tracking. The system allows staff to manage product categories like Milktea, Coffee, Praf, and Fruit Tea, select add-ons, and handle multiple orders efficiently. With automated inventory deduction and dynamic cart functionality, Cafe Shop ensures accurate, fast, and organized transactions.",
       image:
-        "https://images.unsplash.com/photo-1546900703-cf06143d1239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGV8ZW58MXx8fHwxNzU5ODQ1MDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://images.unsplash.com/photo-1521017432531-fbd92d768814?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
       tags: [
         "Laravel",
         "PHP 8.1",
@@ -113,7 +113,7 @@ export function Projects() {
       description:
         "eHataw is a mobile fitness application designed to promote health and wellness through personalized Zumba workouts. The app tailors exercise routines based on the user’s Body Mass Index (BMI) and health condition inputs, ensuring each session fits their fitness level and needs. In addition to curated Zumba exercises, eHataw also provides smart food suggestions with real-time calorie calculations to help users balance their diet and achieve their fitness goals effectively.",
       image:
-        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwaG91c2V8ZW58MXx8fHwxNzYwMDE1NTI1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://images.unsplash.com/photo-1627483298606-cf54c61779a9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
       tags: [
         "Java",
         "Android Studio",
@@ -129,11 +129,11 @@ export function Projects() {
       gradient: "from-green-500 to-teal-500",
     },
     {
-      title: "OpenText Event Microsite",
+      title: "Event Microsite",
       description:
-        "A dynamic microsite built for managing and showcasing OpenText events. The system allows users to register for upcoming events, browse detailed agendas, and view event highlights in a user-friendly interface. Designed for seamless content updates and an engaging attendee experience.",
+        "A dynamic microsite built for managing and showcasing website events. The system allows users to register for upcoming events, browse detailed agendas, and view event highlights in a user-friendly interface. Designed for seamless content updates and an engaging attendee experience.",
       image:
-        "https://images.unsplash.com/photo-1501504905252-473c47e087f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBsZWFybmluZyUyMGVkdWNhdGlvbnxlbnwxfHx8fDE3NjAwMTU1MjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+        "https://images.unsplash.com/photo-1558008258-3256797b43f3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1331",
       tags: [
         "Laravel",
         "PHP",
