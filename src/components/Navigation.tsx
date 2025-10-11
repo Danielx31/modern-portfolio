@@ -9,10 +9,13 @@ export function Navigation() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Set mounted to true to prevent SSR/client mismatch
     setMounted(true);
 
+    // Only run on client side
     if (typeof window !== "undefined") {
       // Initialize with the current scroll position after component mounts
+      // This ensures the client starts with the correct state that matches the actual scroll position
       setIsScrolled(window.scrollY > 50);
 
       const handleScroll = () => {
@@ -24,8 +27,8 @@ export function Navigation() {
     }
   }, []);
 
-  // During initial render, ensure the appearance matches the server render
-  // We'll render the default state initially, then update after mount
+  // During initial render, we always start with the unscrolled state to match server render
+  // After mounting, we update based on actual scroll position
   const displayScrolled = mounted && isScrolled;
 
   const scrollToSection = (sectionId: string) => {
@@ -45,12 +48,19 @@ export function Navigation() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        displayScrolled ? "py-4" : "py-6"
+        // During initial render (hydration), always show unscrolled state to match server
+        // After mounting, use actual scroll state
+        mounted
+          ? displayScrolled
+            ? "py-4 bg-black/80 backdrop-blur-md"
+            : "py-6"
+          : "py-6"
       }`}
     >
       <div
         className={`max-w-7xl mx-auto px-6 ${
-          displayScrolled ? "space-glass rounded-2xl" : ""
+          // Same logic for the space-glass effect
+          mounted ? (displayScrolled ? "space-glass rounded-2xl" : "") : ""
         }`}
       >
         <div className="flex items-center justify-between py-4">

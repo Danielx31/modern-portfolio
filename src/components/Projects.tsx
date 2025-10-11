@@ -2,78 +2,152 @@ import { ExternalLink, Github, Star } from "lucide-react";
 import { Button } from "./ui/button";
 import { ImageWithFallback } from "./image/ImageWithFallback";
 
+interface Project {
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  github: string;
+  live: string;
+  featured: boolean;
+  showGithub: boolean;
+  showLive: boolean;
+  gradient: string;
+}
+
 export function Projects() {
-  const projects = [
+  const projects: Project[] = [
     {
-      title: "E-Commerce Platform",
+      title: "Ticketing System",
       description:
-        "A full-featured online shopping platform with real-time inventory, secure payment processing, and advanced analytics dashboard.",
+        "The system allows employees to submit IT-related issues or service requests, which are automatically logged and assigned unique ticket numbers. Engineers and admins can manage, prioritize, and resolve tickets through a clean dashboard interface with real-time updates and role-based access control.",
       image:
         "https://images.unsplash.com/photo-1727407209320-1fa6ae60ee05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlY29tbWVyY2UlMjBzaG9wcGluZ3xlbnwxfHx8fDE3NTk4OTE4MzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      tags: ["React", "Node.js", "MongoDB", "Stripe"],
+      tags: [
+        "Laravel",
+        "PHP",
+        "JavaScript",
+        "SSMS",
+        "Axios",
+        "Bootstrap",
+        "MaatwebsiteExcel",
+        "Office365SMTP",
+        "IIS",
+        "EloquentORM",
+      ],
       github: "#",
       live: "#",
       featured: true,
+      showGithub: false,
+      showLive: false,
       gradient: "from-purple-500 to-pink-500",
     },
     {
-      title: "Task Management App",
+      title: "Quality Control and Assurance System (QCA System)",
       description:
-        "Collaborative project management tool with real-time updates, team chat, progress tracking, and intelligent automation.",
+        "A Quality Control and Assurance platform that streamlines case tracking and engineer assignment across departments. Built with Laravel and Vue.js, it allows users to create, monitor, and update cases with real-time status, detailed logs, and role-based access. The system ensures transparency, efficiency, and accountability in handling service or production quality processes.",
       image:
         "https://images.unsplash.com/photo-1546900703-cf06143d1239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGV8ZW58MXx8fHwxNzU5ODQ1MDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      tags: ["Next.js", "TypeScript", "PostgreSQL", "WebSocket"],
+      tags: [
+        "Laravel",
+        "VueJS",
+        "SCSS",
+        "WebSocket",
+        "SSMS",
+        "Axios",
+        "Bootstrap",
+        "IIS",
+        "EloquentORM",
+        "RealTimeTracking",
+      ],
       github: "#",
       live: "#",
       featured: true,
+      showGithub: false,
+      showLive: false,
       gradient: "from-blue-500 to-cyan-500",
     },
     {
-      title: "AI Fitness Tracker",
+      title: "Cafe Shop - POS and Inventory Management System",
       description:
-        "Cross-platform mobile app for tracking workouts, nutrition, and health metrics with AI-powered personalized insights.",
+        "A customized Point of Sale and Inventory Management platform designed for beverage businesses. It streamlines daily operations by integrating real-time sales, product customization, and stock tracking. The system allows staff to manage product categories like Milktea, Coffee, Praf, and Fruit Tea, select add-ons, and handle multiple orders efficiently. With automated inventory deduction and dynamic cart functionality, Cafe Shop ensures accurate, fast, and organized transactions.",
       image:
-        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2JpbGUlMjBhcHAlMjBkZXNpZ258ZW58MXx8fHwxNzU5ODU1MzIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      tags: ["React Native", "Firebase", "TensorFlow", "REST API"],
-      github: "#",
+        "https://images.unsplash.com/photo-1546900703-cf06143d1239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGV8ZW58MXx8fHwxNzU5ODQ1MDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      tags: [
+        "Laravel",
+        "PHP 8.1",
+        "MySQL",
+        "JavaScript",
+        "Axios",
+        "Tailwind CSS",
+        "Argon Dashboard",
+        "Blade Template",
+        "POS System",
+        "Inventory Management",
+        "Product Management",
+        "Order Tracking",
+      ],
+      github: "https://github.com/Danielx31/big-brew-shop",
       live: "#",
       featured: false,
+      showGithub: true,
+      showLive: false,
       gradient: "from-pink-500 to-orange-500",
     },
     {
-      title: "Social Media Dashboard",
+      title: "Empowered Enterprise Suite (EES) – Inventory System",
       description:
-        "Analytics platform for managing multiple social media accounts with scheduling, insights, and engagement tracking.",
+        "The Inventory System module of the Empowered Enterprise Suite (EES) is a cloud-based solution designed to efficiently manage and monitor business inventory operations. It provides real-time tracking of stock levels, product movements, and inventory status to ensure accuracy and control. The system streamlines processes such as stock-in, stock-out, and product monitoring, helping businesses maintain optimal inventory levels, reduce waste, and enhance operational efficiency within the EES ecosystem.",
       image:
         "https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXNoYm9hcmQlMjBhbmFseXRpY3N8ZW58MXx8fHwxNzYwMDE1NTI1fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      tags: ["Vue.js", "Python", "GraphQL", "Redis"],
+      tags: ["Vue.js", "Laravel", "REST API", "Eloquent ORM", "Bootstrap"],
       github: "#",
       live: "#",
       featured: false,
+      showGithub: false,
+      showLive: false,
       gradient: "from-cyan-500 to-green-500",
     },
     {
-      title: "Real Estate Platform",
+      title: "eHataw - Mobile Fitness App",
       description:
-        "Modern property listing platform with virtual tours, mortgage calculators, and AI-powered property recommendations.",
+        "eHataw is a mobile fitness application designed to promote health and wellness through personalized Zumba workouts. The app tailors exercise routines based on the user’s Body Mass Index (BMI) and health condition inputs, ensuring each session fits their fitness level and needs. In addition to curated Zumba exercises, eHataw also provides smart food suggestions with real-time calorie calculations to help users balance their diet and achieve their fitness goals effectively.",
       image:
         "https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwaG91c2V8ZW58MXx8fHwxNzYwMDE1NTI1fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      tags: ["React", "Django", "PostgreSQL", "AWS"],
-      github: "#",
+      tags: [
+        "Java",
+        "Android Studio",
+        "Firebase",
+        "Mobile Development",
+        "Fitness App",
+      ],
+      github: "https://github.com/Danielx31/eHataw",
       live: "#",
       featured: false,
+      showGithub: true,
+      showLive: false,
       gradient: "from-green-500 to-teal-500",
     },
     {
-      title: "EdTech Learning Hub",
+      title: "OpenText Event Microsite",
       description:
-        "Interactive online learning platform with live classes, quizzes, progress tracking, and gamification features.",
+        "A dynamic microsite built for managing and showcasing OpenText events. The system allows users to register for upcoming events, browse detailed agendas, and view event highlights in a user-friendly interface. Designed for seamless content updates and an engaging attendee experience.",
       image:
         "https://images.unsplash.com/photo-1501504905252-473c47e087f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBsZWFybmluZyUyMGVkdWNhdGlvbnxlbnwxfHx8fDE3NjAwMTU1MjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      tags: ["Angular", "Node.js", "MySQL", "WebRTC"],
+      tags: [
+        "Laravel",
+        "PHP",
+        "Microsoft SQL",
+        "JavaScript",
+        "Bootstrap",
+        "CSS",
+        "HTML",
+      ],
       github: "#",
       live: "#",
       featured: false,
+      showGithub: false,
+      showLive: false,
       gradient: "from-yellow-500 to-orange-500",
     },
   ];
@@ -129,31 +203,35 @@ export function Projects() {
 
                 {/* Quick Actions */}
                 <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="space-glass-hover border-white/50 text-white hover:text-white backdrop-blur-md"
-                    asChild
-                  >
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {project.showGithub && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="space-glass-hover border-white/50 text-white hover:text-white backdrop-blur-md"
+                      asChild
                     >
-                      <Github className="h-4 w-4 mr-2" />
-                      Code
-                    </a>
-                  </Button>
-                  <Button size="sm" className="cosmic-button" asChild>
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Live Demo
-                    </a>
-                  </Button>
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Github className="h-4 w-4 mr-2" />
+                        Code
+                      </a>
+                    </Button>
+                  )}
+                  {project.showLive && (
+                    <Button size="sm" className="cosmic-button" asChild>
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Live Demo
+                      </a>
+                    </Button>
+                  )}
                 </div>
               </div>
 
