@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Daniel Portfolio",
   description: "Full Stack Developer",
+  icons: {
+    icon: [{ url: "/images/icon.png", type: "image/png", sizes: "32x32" }],
+    shortcut: "/favicon.ico",
+    apple: "/images/icon.png",
+  },
 };
 
 export default function RootLayout({

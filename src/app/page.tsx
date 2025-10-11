@@ -7,6 +7,10 @@ import { Skills } from "../components/Skills";
 import { Contact } from "../components/Contact";
 import { Footer } from "../components/Footer";
 import { useEffect, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const [stars, setStars] = useState<
