@@ -18,7 +18,7 @@ export function Navigation() {
 
   // Track active section via IntersectionObserver
   useEffect(() => {
-    const sectionIds = ["home", "about", "experience", "projects", "skills", "testimonials", "contact"];
+    const sectionIds = ["home", "about", "experience", "projects", "skills", "contributions", "contact"];
     const observers: IntersectionObserver[] = [];
 
     sectionIds.forEach((id) => {
@@ -49,7 +49,7 @@ export function Navigation() {
     { label: "Experience", id: "experience" },
     { label: "Projects", id: "projects" },
     { label: "Skills", id: "skills" },
-    { label: "Contributions", id: "testimonials" },
+    { label: "Contributions", id: "contributions" },
     { label: "Contact", id: "contact" },
   ];
 
