@@ -1,32 +1,55 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Menu, X, Rocket } from "lucide-react";
 import { Button } from "./ui/button";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
-  // ✅ Only runs in client, no mismatch
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
+  // Track active section via IntersectionObserver
+  useEffect(() => {
+    const sectionIds = ["home", "about", "experience", "projects", "skills", "testimonials", "contact"];
+    const observers: IntersectionObserver[] = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id);
+        },
+        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: "smooth" });
     setIsMobileMenuOpen(false);
-  };
+  }, []);
 
   const navLinks = [
     { label: "Home", id: "home" },
     { label: "About", id: "about" },
+    { label: "Experience", id: "experience" },
     { label: "Projects", id: "projects" },
     { label: "Skills", id: "skills" },
+    { label: "Contributions", id: "testimonials" },
     { label: "Contact", id: "contact" },
   ];
 
@@ -46,6 +69,7 @@ export function Navigation() {
           <button
             onClick={() => scrollToSection("home")}
             className="flex items-center gap-2 group"
+            aria-label="Go to top"
           >
             <div className="relative">
               <Rocket className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
@@ -56,16 +80,27 @@ export function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                className="text-slate-300 hover:text-white transition-colors relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300" />
-              </button>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className={`transition-colors relative group ${
+                    isActive
+                      ? "text-white"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </button>
+              );
+            })}
           </div>
 
           {/* CTA Button - Desktop */}
@@ -82,6 +117,8 @@ export function Navigation() {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 text-slate-300 hover:text-white transition-colors"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -90,17 +127,24 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 mt-2 mx-4 space-glass rounded-2xl overflow-hidden">
+        <div className="md:hidden absolute top-full left-0 right-0 mt-2 mx-4 space-glass rounded-2xl overflow-hidden mobile-menu-animate">
           <div className="flex flex-col p-4 space-y-2">
-            {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                className="text-left px-4 py-3 text-slate-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-all"
-              >
-                {link.label}
-              </button>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className={`text-left px-4 py-3 rounded-lg transition-all ${
+                    isActive
+                      ? "text-white bg-purple-500/20"
+                      : "text-slate-300 hover:text-white hover:bg-purple-500/10"
+                  }`}
+                >
+                  {link.label}
+                </button>
+              );
+            })}
             <Button
               onClick={() => scrollToSection("contact")}
               className="cosmic-button mt-4"

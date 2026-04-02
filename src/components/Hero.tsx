@@ -1,6 +1,6 @@
-import { ArrowDown, Sparkles, Rocket } from "lucide-react";
+import { ArrowDown, Sparkles, Rocket, Download } from "lucide-react";
 import { Button } from "./ui/button";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { gsap } from "gsap";
 
 export function Hero() {
@@ -10,6 +10,17 @@ export function Hero() {
   const descRef = useRef<HTMLParagraphElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
+
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 15 }, () => ({
+        top: `${Math.random() * 90}%`,
+        left: `${Math.random() * 90}%`,
+        duration: 5 + Math.random() * 10,
+        delay: Math.random() * 5,
+      })),
+    []
+  );
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -203,30 +214,44 @@ export function Hero() {
           >
             Get In Touch
           </Button>
+          <a href="/resume.pdf" download="Daniel_Balverde_Resume.pdf">
+            <Button
+              size="lg"
+              variant="outline"
+              className="space-glass-hover border-cyan-500/50 text-cyan-200 hover:text-white group"
+            >
+              <Download className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+              Download CV
+            </Button>
+          </a>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="pt-16 animate-bounce">
-          <div className="inline-flex flex-col items-center gap-2 text-purple-300/60">
-            <span className="text-sm">Scroll to explore</span>
-            <ArrowDown className="w-5 h-5" />
-          </div>
+        <div className="pt-16">
+          <button
+            onClick={() => scrollToSection("about")}
+            className="inline-flex flex-col items-center gap-2 text-purple-300/60 hover:text-purple-300 transition-colors group"
+            aria-label="Scroll to about section"
+          >
+            <span className="text-sm tracking-widest uppercase text-xs">Scroll to explore</span>
+            <div className="flex flex-col items-center gap-0.5 animate-bounce">
+              <ArrowDown className="w-5 h-5" />
+            </div>
+          </button>
         </div>
       </div>
 
       {/* Floating Particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {particles.map((p, i) => (
           <div
             key={i}
             className="particle"
             style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animation: `float ${
-                5 + Math.random() * 10
-              }s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
+              top: p.top,
+              left: p.left,
+              animation: `float ${p.duration}s ease-in-out infinite`,
+              animationDelay: `${p.delay}s`,
             }}
           />
         ))}

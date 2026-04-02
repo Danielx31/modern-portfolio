@@ -2,15 +2,19 @@
 import { Navigation } from "../components/Navigation";
 import { Hero } from "../components/Hero";
 import { About } from "../components/About";
+import { Experience } from "../components/Experience";
 import { Projects } from "../components/Projects";
 import { Skills } from "../components/Skills";
+import { Testimonials } from "../components/Testimonials";
 import { Contact } from "../components/Contact";
 import { Footer } from "../components/Footer";
 import { useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function App() {
   const [stars, setStars] = useState<
@@ -20,7 +24,7 @@ export default function App() {
   useEffect(() => {
     // Generate random stars
     const starArray = [];
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 80; i++) {
       starArray.push({
         top: `${Math.random() * 100}%`,
         left: `${Math.random() * 100}%`,
@@ -39,7 +43,7 @@ export default function App() {
   return (
     <div className="relative min-h-screen bg-[#0a0e27] overflow-x-hidden">
       {/* Starfield Background */}
-      <div className="stars fixed inset-0 z-0">
+      <div className="stars fixed inset-0 z-0" aria-hidden="true">
         {stars.map((star, i) => (
           <div
             key={i}
@@ -54,7 +58,7 @@ export default function App() {
       </div>
 
       {/* Nebula Clouds */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
         <div
           className="nebula nebula-purple"
           style={{
@@ -98,7 +102,7 @@ export default function App() {
       </div>
 
       {/* Shooting Stars */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
         <div
           className="shooting-star"
           style={{
@@ -134,8 +138,10 @@ export default function App() {
         <main>
           <Hero />
           <About />
+          <Experience />
           <Projects />
           <Skills />
+          <Testimonials />
           <Contact />
         </main>
         <Footer />

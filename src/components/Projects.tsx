@@ -5,7 +5,9 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface Project {
   title: string;
@@ -311,7 +313,7 @@ export function Projects() {
                 <h3 className="text-2xl text-white group-hover:text-glow transition-all">
                   {project.title}
                 </h3>
-                <p className="text-slate-400 leading-relaxed">
+                <p className="text-slate-400 leading-relaxed line-clamp-3">
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-2 pt-2">

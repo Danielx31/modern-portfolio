@@ -3,7 +3,9 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -194,7 +196,7 @@ export function About() {
             return (
               <div
                 key={index}
-                className="feature-card group relative space-glass-hover rounded-2xl p-8 parallax-layer"
+                className="feature-card group relative space-glass-hover rounded-2xl p-8"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {/* Glow Border Effect */}
